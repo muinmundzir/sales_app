@@ -8,9 +8,10 @@ export class CreateItemsTable1722422701859 implements MigrationInterface {
         columns: [
           {
             name: 'id',
-            type: 'integer',
+            type: 'int',
             isPrimary: true,
-            generationStrategy: 'increment',
+            isGenerated: true,
+            generationStrategy: 'identity'
           },
           {
             name: 'code',
@@ -27,8 +28,6 @@ export class CreateItemsTable1722422701859 implements MigrationInterface {
           {
             name: 'price',
             type: 'numeric',
-            precision: 3,
-            scale: 2,
             isNullable: true,
           },
           {
