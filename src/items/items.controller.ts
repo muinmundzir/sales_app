@@ -1,5 +1,5 @@
 import { Body, Controller, Get, Param, Post } from '@nestjs/common';
-import { ApiBody, ApiCreatedResponse, ApiOkResponse, ApiParam, ApiTags } from '@nestjs/swagger';
+import { ApiBody, ApiCreatedResponse, ApiNotFoundResponse, ApiOkResponse, ApiParam, ApiTags } from '@nestjs/swagger';
 
 import { ItemsService } from '@app/items/items.service';
 import { CreateItemDto } from '@app/items/dto/create-item.dto';
@@ -29,8 +29,11 @@ export class ItemsController {
     return await this.itemsService.create(itemDto)
   }
 
-  @ApiCreatedResponse({
+  @ApiOkResponse({
     description: 'Return one item',
+  })
+  @ApiNotFoundResponse({
+    description: 'Item with inserted ID not found'
   })
   @ApiParam({
     name: 'id',

@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
@@ -36,7 +36,11 @@ export class ItemsService {
 
   async findOne(itemId: number) {
     try {
-      return await this.itemsRepository.findOneBy({ id: itemId });
+      const item = await this.itemsRepository.findOneBy({ id: itemId });
+
+      if(!item) throw new NotFoundException('Item not found')
+
+      return item
     } catch (error) {
       throw error
     }
