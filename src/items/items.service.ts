@@ -11,7 +11,7 @@ export class ItemsService {
 
   }
 
-  async create(itemDto: CreateItemDto) {
+  async create(itemDto: CreateItemDto) : Promise<Item> {
     try {
       const { code, name, price } = itemDto
       
@@ -26,7 +26,7 @@ export class ItemsService {
     }
   }
 
-  async find() {
+  async find(): Promise<Item[]> {
     try {
       return await this.itemsRepository.find();
     } catch (error) {
@@ -34,7 +34,7 @@ export class ItemsService {
     }
   }
 
-  async findOne(itemId: number) {
+  async findOne(itemId: number) : Promise<Item> {
     try {
       const item = await this.itemsRepository.findOneBy({ id: itemId });
 
@@ -43,6 +43,16 @@ export class ItemsService {
       return item
     } catch (error) {
       throw error
+    }
+  }
+
+  async delete(itemId: number) : Promise<Item> {
+    try {
+      const item = await this.findOne(itemId)
+
+      return await this.itemsRepository.remove(item)
+    } catch (error) {
+      throw error;
     }
   }
 }
