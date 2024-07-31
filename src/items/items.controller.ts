@@ -1,5 +1,5 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
-import { ApiBody, ApiCreatedResponse, ApiOkResponse, ApiTags } from '@nestjs/swagger';
+import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import { ApiBody, ApiCreatedResponse, ApiOkResponse, ApiParam, ApiTags } from '@nestjs/swagger';
 
 import { ItemsService } from '@app/items/items.service';
 import { CreateItemDto } from '@app/items/dto/create-item.dto';
@@ -27,5 +27,17 @@ export class ItemsController {
   @Post('create')
   async createItem(@Body() itemDto: CreateItemDto) {
     return await this.itemsService.create(itemDto)
+  }
+
+  @ApiCreatedResponse({
+    description: 'Return one item',
+  })
+  @ApiParam({
+    name: 'id',
+    type: 'number'
+  })
+  @Get('/:id')
+  async getItem(@Param() itemQuery: { id: number }) {
+    return await this.itemsService.findOne(itemQuery.id)
   }
 }

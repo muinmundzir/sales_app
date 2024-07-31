@@ -33,4 +33,12 @@ export class ItemsService {
        throw error 
     }
   }
+
+  async findOne(itemId: number) {
+    try {
+      return await this.itemsRepository.findOneBy({ id: itemId });
+    } catch (error) {
+      throw error
+    }
+  }
 }
