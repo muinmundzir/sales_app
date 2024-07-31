@@ -1,15 +1,18 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Injectable, Logger, NotFoundException } from '@nestjs/common'
+import { InjectRepository } from '@nestjs/typeorm'
+import { Repository } from 'typeorm'
 
-import { Customer } from '@app/customers/customer.entity';
-import { CreateCustomerDto } from '@app/customers/dto/create-customer.dto';
+import { Customer } from '@app/customers/customer.entity'
+import { CreateCustomerDto } from '@app/customers/dto/create-customer.dto'
 
 @Injectable()
 export class CustomersService {
-  constructor(@InjectRepository(Customer) private customersRepository: Repository<Customer>) {}
+  constructor(
+    @InjectRepository(Customer)
+    private customersRepository: Repository<Customer>
+  ) {}
 
-  async create(customerDto: CreateCustomerDto) : Promise<Customer> {
+  async create(customerDto: CreateCustomerDto): Promise<Customer> {
     try {
       const { name, phone } = customerDto
 
@@ -19,27 +22,40 @@ export class CustomersService {
 
       return await this.customersRepository.save(customer)
     } catch (error) {
-      throw error;
+      throw error
     }
   }
 
-  async find() : Promise<Customer[]> {
+  async find(): Promise<Customer[]> {
     try {
-      return await this.customersRepository.find();
+      return await this.customersRepository.find()
     } catch (error) {
-      throw error;
+      throw error
     }
   }
 
-  async findOne(customerId: number) : Promise<Customer> {
+  async findOne(customerId: number): Promise<Customer> {
     try {
-      const customer = await this.customersRepository.findOneBy({ id: customerId });
+      const customer = await this.customersRepository.findOneBy({
+        id: customerId,
+      })
 
-      if(!customer) throw new NotFoundException('Customer not found')
+      if (!customer) throw new NotFoundException('Customer not found')
 
       return customer
     } catch (error) {
-      throw error;
+      throw error
+    }
+  }
+
+  async delete(customerId: number): Promise<Customer> {
+    try {
+      const customer = await this.findOne(customerId)
+      Logger.log(customer)
+
+      return await this.customersRepository.remove(customer)
+    } catch (error) {
+      throw error
     }
   }
 }
