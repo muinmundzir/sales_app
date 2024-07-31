@@ -1,4 +1,4 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { AfterLoad, Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity('items')
 export class Item {
@@ -28,4 +28,10 @@ export class Item {
     onUpdate: 'CURRENT_TIMESTAMP',
   })
   updatedAt: Date;
+
+  @AfterLoad()
+  async removeTimestamps() {
+    delete this.createdAt
+    delete this.updatedAt
+  }
 }
