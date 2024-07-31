@@ -11,6 +11,9 @@ export class Item {
   @Column()
   name: string;
 
+  @Column()
+  price: number;
+
   @Column({
     name: 'created_at',
     type: 'timestamp',
