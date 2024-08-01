@@ -1,11 +1,14 @@
-import { Sale } from '@app/sales/sale.entity';
 import {
   Column,
   Entity,
   JoinColumn,
+  ManyToOne,
   OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
+
+import { Item } from '@app/items/item.entity';
+import { Sale } from '@app/sales/sale.entity';
 
 @Entity('sale_details')
 export class SaleDetail {
@@ -15,8 +18,8 @@ export class SaleDetail {
   @Column({ name: 'sale_id' })
   saleId: number;
 
-  @Column({ name: 'customer_id' })
-  customerId: number;
+  @Column({ name: 'item_id' })
+  itemId: number;
 
   @Column()
   price: number;
@@ -51,7 +54,11 @@ export class SaleDetail {
   })
   updatedAt: Date;
 
-  @OneToOne(() => Sale, (sale) => sale.saleDetail)
+  @ManyToOne(() => Sale, (sale) => sale.saleDetail)
   @JoinColumn({ name: 'sale_id' })
   sale: Sale;
+
+  @OneToOne(() => Item, (item) => item.saleDetail)
+  @JoinColumn({ name: 'item_id' })
+  item: Item;
 }
