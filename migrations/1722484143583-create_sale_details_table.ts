@@ -79,6 +79,7 @@ export class CreateSaleDetailsTable1722484143583 implements MigrationInterface {
         columnNames: ['sale_id'],
         referencedColumnNames: ['id'],
         referencedTableName: 'sales',
+        onDelete: 'CASCADE',
       })
     );
 

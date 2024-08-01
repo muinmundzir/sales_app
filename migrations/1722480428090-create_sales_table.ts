@@ -27,6 +27,7 @@ export class CreateSalesTable1722480428090 implements MigrationInterface {
             name: 'code',
             type: 'varchar',
             length: '15',
+            isUnique: true,
             isNullable: false,
           },
           {
