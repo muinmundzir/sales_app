@@ -1,11 +1,17 @@
-
-import { AfterLoad, Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Sale } from '@app/sales/sale.entity';
+import {
+  AfterLoad,
+  Column,
+  Entity,
+  OneToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
 @Entity('customers')
 export class Customer {
   @PrimaryGeneratedColumn()
   id: number;
-  
+
   @Column()
   name: string;
 
@@ -27,9 +33,12 @@ export class Customer {
   })
   updatedAt: Date;
 
+  @OneToMany(() => Sale, (sale) => sale.customer)
+  sales: Sale[];
+
   @AfterLoad()
   async removeTimestamps() {
-    delete this.createdAt
-    delete this.updatedAt
+    delete this.createdAt;
+    delete this.updatedAt;
   }
 }
