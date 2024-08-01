@@ -3,6 +3,7 @@ import {
   Entity,
   JoinColumn,
   ManyToOne,
+  OneToMany,
   OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
@@ -57,6 +58,6 @@ export class Sale {
   @JoinColumn({ name: 'customer_id' })
   customer: Customer[];
 
-  @OneToOne(() => SaleDetail, (details) => details.sale)
-  saleDetail: SaleDetail;
+  @OneToMany(() => SaleDetail, (details) => details.sale)
+  saleDetail: SaleDetail[];
 }
