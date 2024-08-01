@@ -1,8 +1,9 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Get, Post, Query } from '@nestjs/common';
 import {
   ApiBody,
   ApiCreatedResponse,
   ApiOkResponse,
+  ApiQuery,
   ApiTags,
 } from '@nestjs/swagger';
 
@@ -19,8 +20,13 @@ export class SalesController {
     description: 'Return list of sales',
   })
   @Get('')
-  async getAll(): Promise<Sale[]> {
-    return await this.salesService.find();
+  @ApiQuery({
+    name: 'query',
+    description: 'Search sales by customer name or transaction code',
+    required: false,
+  })
+  async getAll(@Query() queryParams: { query: string }): Promise<Sale[]> {
+    return await this.salesService.find(queryParams.query);
   }
 
   @ApiCreatedResponse({
