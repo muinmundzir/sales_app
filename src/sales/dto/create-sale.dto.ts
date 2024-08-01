@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsDate, IsNotEmpty, IsNumber, IsString } from 'class-validator';
+import { IsDate, IsNotEmpty, IsNumber } from 'class-validator';
 
 import { CreateDetailsDto } from '@app/sale-details/dto/create-details.dto';
 import { Transform } from 'class-transformer';
@@ -10,8 +10,7 @@ export class CreateSaleDto {
     readOnly: true,
     description: 'Generated automatically by server',
   })
-  @IsString()
-  code: string;
+  code?: string;
 
   @ApiProperty({
     example: '2025-07-30T00:00:00.000Z',
