@@ -1,4 +1,5 @@
 import {
+  AfterLoad,
   Column,
   Entity,
   JoinColumn,
@@ -61,4 +62,11 @@ export class SaleDetail {
   @OneToOne(() => Item, (item) => item.saleDetail)
   @JoinColumn({ name: 'item_id' })
   item: Item;
+
+  @AfterLoad()
+  async removeTimestamps() {
+    delete this.itemId;
+    delete this.createdAt;
+    delete this.updatedAt;
+  }
 }

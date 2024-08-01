@@ -6,8 +6,9 @@ import { Transform } from 'class-transformer';
 
 export class CreateSaleDto {
   @ApiProperty({
-    example: 'SALE001',
-    required: true,
+    example: '202804-0001',
+    readOnly: true,
+    description: 'Generated automatically by server',
   })
   @IsString()
   code: string;
