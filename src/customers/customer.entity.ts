@@ -1,3 +1,4 @@
+import { SaleDetail } from '@app/sale-details/sale-detail.entity';
 import { Sale } from '@app/sales/sale.entity';
 import {
   AfterLoad,

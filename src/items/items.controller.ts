@@ -1,5 +1,12 @@
 import { Body, Controller, Delete, Get, Param, Post } from '@nestjs/common';
-import { ApiBody, ApiCreatedResponse, ApiNotFoundResponse, ApiOkResponse, ApiParam, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBody,
+  ApiCreatedResponse,
+  ApiNotFoundResponse,
+  ApiOkResponse,
+  ApiParam,
+  ApiTags,
+} from '@nestjs/swagger';
 
 import { ItemsService } from '@app/items/items.service';
 import { CreateItemDto } from '@app/items/dto/create-item.dto';
@@ -14,7 +21,7 @@ export class ItemsController {
     description: 'Return list of items',
   })
   @Get('')
-  async listItems() : Promise<Item[]> {
+  async listItems(): Promise<Item[]> {
     return await this.itemsService.find();
   }
 
@@ -23,40 +30,40 @@ export class ItemsController {
   })
   @ApiBody({
     type: CreateItemDto,
-    description: 'JSON structure for trip object',
+    description: 'JSON structure for item object',
   })
   @Post('create')
-  async createItem(@Body() itemDto: CreateItemDto) : Promise<Item> {
-    return await this.itemsService.create(itemDto)
+  async createItem(@Body() itemDto: CreateItemDto): Promise<Item> {
+    return await this.itemsService.create(itemDto);
   }
 
   @ApiOkResponse({
     description: 'Return one item',
   })
   @ApiNotFoundResponse({
-    description: 'Item with inserted ID not found'
+    description: 'Item with inserted ID not found',
   })
   @ApiParam({
     name: 'id',
-    type: 'number'
+    type: 'number',
   })
   @Get('/:id')
-  async getItem(@Param() itemQuery: { id: number }) : Promise<Item> {
-    return await this.itemsService.findOne(itemQuery.id)
+  async getItem(@Param() itemQuery: { id: number }): Promise<Item> {
+    return await this.itemsService.findOne(itemQuery.id);
   }
 
   @ApiOkResponse({
     description: 'Return deleted item',
   })
   @ApiNotFoundResponse({
-    description: 'Item with inserted ID not found'
+    description: 'Item with inserted ID not found',
   })
   @ApiParam({
     name: 'id',
-    type: 'number'
+    type: 'number',
   })
   @Delete('/:id')
-  async deleteItem(@Param() itemParam: { id: number }) : Promise<Item> {
-    return await this.itemsService.delete(itemParam.id)
+  async deleteItem(@Param() itemParam: { id: number }): Promise<Item> {
+    return await this.itemsService.delete(itemParam.id);
   }
 }
