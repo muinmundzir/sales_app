@@ -17,8 +17,11 @@ async function bootstrap() {
         }));
         return new BadRequestException(result);
       },
-    }),
+    })
   );
+
+  app.enableCors();
+
   const document = SwaggerModule.createDocument(app, swaggerConfig);
   SwaggerModule.setup('api-docs', app, document);
 
