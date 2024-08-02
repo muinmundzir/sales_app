@@ -1,10 +1,11 @@
-import { Body, Controller, Delete, Get, Param, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Query } from '@nestjs/common';
 import {
   ApiBody,
   ApiCreatedResponse,
   ApiNotFoundResponse,
   ApiOkResponse,
   ApiParam,
+  ApiQuery,
   ApiTags,
 } from '@nestjs/swagger';
 
@@ -20,9 +21,14 @@ export class ItemsController {
   @ApiOkResponse({
     description: 'Return list of items',
   })
+  @ApiQuery({
+    name: 'query',
+    description: 'Search item by name or code',
+    required: false,
+  })
   @Get('')
-  async listItems(): Promise<Item[]> {
-    return await this.itemsService.find();
+  async listItems(@Query() queryParams: { query: string }): Promise<Item[]> {
+    return await this.itemsService.find(queryParams.query);
   }
 
   @ApiCreatedResponse({

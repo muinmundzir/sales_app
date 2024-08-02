@@ -1,44 +1,57 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Injectable, NotFoundException } from '@nestjs/common'
+import { InjectRepository } from '@nestjs/typeorm'
+import { ILike, Repository } from 'typeorm'
 
-import { Item } from '@app/items/item.entity';
-import { CreateItemDto } from '@app/items/dto/create-item.dto';
+import { Item } from '@app/items/item.entity'
+import { CreateItemDto } from '@app/items/dto/create-item.dto'
 
 @Injectable()
 export class ItemsService {
-  constructor(@InjectRepository(Item) private itemsRepository: Repository<Item>) {
+  constructor(
+    @InjectRepository(Item) private itemsRepository: Repository<Item>
+  ) {}
 
-  }
-
-  async create(itemDto: CreateItemDto) : Promise<Item> {
+  async create(itemDto: CreateItemDto): Promise<Item> {
     try {
       const { code, name, price } = itemDto
-      
+
       const item = new Item()
-      item.code = code;
-      item.name = name;
-      item.price = price;
+      item.code = code
+      item.name = name
+      item.price = price
 
       return await this.itemsRepository.save(item)
     } catch (error) {
-      throw error;
+      throw error
     }
   }
 
-  async find(): Promise<Item[]> {
+  async find(query: string): Promise<Item[]> {
     try {
-      return await this.itemsRepository.find();
+      if (query !== undefined && query !== '') {
+        return await this.itemsRepository.find({
+          where: [
+            {
+              code: ILike(`%${query}`),
+            },
+            {
+              name: ILike(`%${query}%`),
+            },
+          ],
+        });
+      }
+
+      return await this.itemsRepository.find()
     } catch (error) {
-       throw error 
+      throw error
     }
   }
 
-  async findOne(itemId: number) : Promise<Item> {
+  async findOne(itemId: number): Promise<Item> {
     try {
-      const item = await this.itemsRepository.findOneBy({ id: itemId });
+      const item = await this.itemsRepository.findOneBy({ id: itemId })
 
-      if(!item) throw new NotFoundException('Item not found')
+      if (!item) throw new NotFoundException('Item not found')
 
       return item
     } catch (error) {
@@ -46,13 +59,13 @@ export class ItemsService {
     }
   }
 
-  async delete(itemId: number) : Promise<Item> {
+  async delete(itemId: number): Promise<Item> {
     try {
       const item = await this.findOne(itemId)
 
       return await this.itemsRepository.remove(item)
     } catch (error) {
-      throw error;
+      throw error
     }
   }
 }
