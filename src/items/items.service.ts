@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common'
+import { ForbiddenException, Injectable, NotFoundException } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { ILike, Repository } from 'typeorm'
 
@@ -59,9 +59,29 @@ export class ItemsService {
     }
   }
 
+  async findOneWithRelation(itemId: number): Promise<Item> {
+    try {
+      const item = await this.itemsRepository.findOne({
+        relations: ['saleDetail'],
+        where: {
+          id: itemId
+        }
+      })
+
+      if (!item) throw new NotFoundException('Item not found')
+
+      return item
+    } catch (error) {
+      throw error
+    }
+  }
+
   async delete(itemId: number): Promise<Item> {
     try {
-      const item = await this.findOne(itemId)
+      const item = await this.findOneWithRelation(itemId)
+      console.log({...item})
+
+      if(item.saleDetail.length) throw  new ForbiddenException('Item dipakai pada transaksi lain')
 
       return await this.itemsRepository.remove(item)
     } catch (error) {

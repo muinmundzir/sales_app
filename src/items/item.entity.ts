@@ -37,7 +37,7 @@ export class Item {
   updatedAt: Date;
 
   @OneToMany(() => SaleDetail, (details) => details.item)
-  saleDetail: SaleDetail;
+  saleDetail: SaleDetail[];
 
   @AfterLoad()
   async removeTimestamps() {
