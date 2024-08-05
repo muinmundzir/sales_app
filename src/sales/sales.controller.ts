@@ -40,4 +40,12 @@ export class SalesController {
   async createSale(@Body() saleDto: CreateSaleDto) {
     return await this.salesService.create(saleDto);
   }
+
+  @ApiOkResponse({
+    description: 'Return generated code sales',
+  })
+  @Get('/code')
+  async getSalesCode() {
+    return await this.salesService.getSalesCode();
+  }
 }

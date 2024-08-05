@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { DataSource, ILike, Repository } from 'typeorm';
 
@@ -13,7 +13,7 @@ export class SalesService {
     @InjectRepository(Sale) private salesRepository: Repository<Sale>,
     private dataSource: DataSource,
     private detailsRepository: SaleDetailsService,
-    private costumerRepository: CustomersService,
+    private costumerRepository: CustomersService
   ) {}
 
   async find(query: string): Promise<Sale[]> {
@@ -83,14 +83,23 @@ export class SalesService {
     }
   }
 
-  async generateSalesCode() {
+  async getSalesCode() {
+    const query = 'select last_value from sales_code_sequence';
+    return await this.generateSalesCode(query);
+  }
+
+  async generateSalesCode(query?: string) {
+    const baseQuery = "SELECT nextval('sales_code_sequence')";
     const currentDate = new Date();
     const year = currentDate.getFullYear();
     const month = String(currentDate.getMonth() + 1).padStart(2, '0');
     const sequenceResult = await this.dataSource.query(
-      "SELECT nextval('sales_code_sequence')"
+      query ? query : baseQuery
     );
-    const sequence = String(sequenceResult[0].nextval!).padStart(4, '0');
+    let sequence = String(sequenceResult[0].nextval!).padStart(4, '0');
+
+    if (query)
+      sequence = String(sequenceResult[0].last_value!).padStart(4, '0');
 
     return `${year}${month}-${sequence}`;
   }
