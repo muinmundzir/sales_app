@@ -1,16 +1,25 @@
-import { Body, Controller, Delete, Get, Param, Post } from '@nestjs/common'
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  Query,
+} from '@nestjs/common';
 import {
   ApiBody,
   ApiCreatedResponse,
   ApiNotFoundResponse,
   ApiOkResponse,
   ApiParam,
+  ApiQuery,
   ApiTags,
-} from '@nestjs/swagger'
+} from '@nestjs/swagger';
 
-import { CustomersService } from '@app/customers/customers.service'
-import { Customer } from '@app/customers/customer.entity'
-import { CreateCustomerDto } from '@app/customers/dto/create-customer.dto'
+import { CustomersService } from '@app/customers/customers.service';
+import { Customer } from '@app/customers/customer.entity';
+import { CreateCustomerDto } from '@app/customers/dto/create-customer.dto';
 
 @ApiTags('Customers')
 @Controller('customers')
@@ -20,9 +29,16 @@ export class CustomersController {
   @ApiOkResponse({
     description: 'Return list of customers',
   })
+  @ApiQuery({
+    name: 'query',
+    description: 'Search sales by customer name or transaction code',
+    required: false,
+  })
   @Get('')
-  async listCustomers(): Promise<Customer[]> {
-    return await this.customersService.find()
+  async listCustomers(
+    @Query() queryParams: { query: string }
+  ): Promise<Customer[]> {
+    return await this.customersService.find(queryParams.query);
   }
 
   @ApiCreatedResponse({
@@ -34,7 +50,7 @@ export class CustomersController {
   })
   @Post('create')
   async createCustomer(@Body() itemDto: CreateCustomerDto): Promise<Customer> {
-    return await this.customersService.create(itemDto)
+    return await this.customersService.create(itemDto);
   }
 
   @ApiOkResponse({
@@ -49,7 +65,7 @@ export class CustomersController {
   })
   @Get('/:id')
   async getItem(@Param() itemQuery: { id: number }): Promise<Customer> {
-    return await this.customersService.findOne(itemQuery.id)
+    return await this.customersService.findOne(itemQuery.id);
   }
 
   @ApiOkResponse({
@@ -66,6 +82,6 @@ export class CustomersController {
   async deleteCustomer(
     @Param() customerParam: { id: number }
   ): Promise<Customer> {
-    return await this.customersService.delete(customerParam.id)
+    return await this.customersService.delete(customerParam.id);
   }
 }

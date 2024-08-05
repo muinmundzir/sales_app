@@ -1,6 +1,6 @@
 import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { ILike, Repository } from 'typeorm';
 
 import { Customer } from '@app/customers/customer.entity';
 import { CreateCustomerDto } from '@app/customers/dto/create-customer.dto';
@@ -26,9 +26,28 @@ export class CustomersService {
     }
   }
 
-  async find(): Promise<Customer[]> {
+  async find(query: string): Promise<Customer[]> {
     try {
-      return await this.customersRepository.find();
+      if (query !== undefined && query !== '') {
+        return await this.customersRepository.find({
+          where: [
+            {
+              name: ILike(`%${query}%`),
+            },
+          ],
+          take: 5,
+          order: {
+            name: 'ASC',
+          },
+        });
+      }
+
+      return await this.customersRepository.find({
+        take: 5,
+        order: {
+          name: 'ASC',
+        },
+      });
     } catch (error) {
       throw error;
     }
