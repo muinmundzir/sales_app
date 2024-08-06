@@ -25,6 +25,7 @@ const connectionConfig = process.env.DB_URL
       migrations: ['dist/migrations/*{.ts,.js}'],
       autoLoadEntities: true,
       synchronize: false,
+      ssl: true
     }
   : config;
 
