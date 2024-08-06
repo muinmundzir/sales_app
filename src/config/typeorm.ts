@@ -19,7 +19,7 @@ const config = {
 
 const connectionConfig = process.env.DB_URL
   ? {
-      type: 'postgres', // or other types if needed
+      type: process.env.DB_TYPE,
       url: process.env.DB_URL,
       entities: ['dist/src/**/*.entity{.ts,.js}'],
       migrations: ['dist/migrations/*{.ts,.js}'],
