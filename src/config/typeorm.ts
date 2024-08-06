@@ -7,7 +7,7 @@ dotenvConfig({ path: '.env' });
 const config = {
   type: `${process.env.DB_TYPE}`,
   host: `${process.env.DB_HOST}`,
-  port: `${process.env.DB_PORT}`,
+  // port: `${process.env.DB_PORT}`,
   username: `${process.env.DB_USERNAME}`,
   password: `${process.env.DB_PASSWORD}`,
   database: `${process.env.DB_NAME}`,
@@ -15,9 +15,9 @@ const config = {
   migrations: ['dist/migrations/*{.ts,.js}'],
   autoLoadEntities: true,
   synchronize: false,
-  ssl: {
-    rejectUnauthorized: true // or false if you don't want to reject unauthorized certificates
-  }
+  // ssl: {
+  //   rejectUnauthorized: true // or false if you don't want to reject unauthorized certificates
+  // }
 };
 
 export default registerAs('typeorm', () => config);
