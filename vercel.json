@@ -11,5 +11,6 @@
       "src": "/(.*)",
       "dest": "dist/main.js"
     }
-  ]
+  ],
+  "buildCommand": "sh vercel.sh"
 }
