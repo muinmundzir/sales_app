@@ -38,10 +38,17 @@ export class ItemsService {
               name: ILike(`%${query}%`),
             },
           ],
+          order: {
+            createdAt: 'DESC',
+          },
         });
       }
 
-      return await this.itemsRepository.find()
+      return await this.itemsRepository.find({
+        order: {
+          createdAt: 'DESC',
+        },
+      })
     } catch (error) {
       throw error
     }
@@ -79,9 +86,8 @@ export class ItemsService {
   async delete(itemId: number): Promise<Item> {
     try {
       const item = await this.findOneWithRelation(itemId)
-      console.log({...item})
 
-      if(item.saleDetail.length) throw  new ForbiddenException('Item dipakai pada transaksi lain')
+      if(item.saleDetail.length) throw new ForbiddenException('Item dipakai pada transaksi lain')
 
       return await this.itemsRepository.remove(item)
     } catch (error) {

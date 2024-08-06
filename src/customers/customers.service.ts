@@ -35,17 +35,15 @@ export class CustomersService {
               name: ILike(`%${query}%`),
             },
           ],
-          take: 5,
           order: {
-            name: 'ASC',
+            createdAt: 'DESC',
           },
         });
       }
 
       return await this.customersRepository.find({
-        take: 5,
         order: {
-          name: 'ASC',
+          createdAt: 'DESC',
         },
       });
     } catch (error) {
